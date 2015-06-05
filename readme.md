@@ -1,2 +1,3 @@
-# LogR (2.2.3)
-Realtime Logger with windows monitor
+# EventBrokR (1.2.4)
+
+Publish any asynchronous event on application and take it from multiple consumers
