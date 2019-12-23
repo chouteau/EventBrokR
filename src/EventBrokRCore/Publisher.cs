@@ -118,8 +118,13 @@ namespace EventBrokR
 
 		private Consumer<T> Resolve<T>(Type t)
 		{
-			var instance = m_ServiceProvider.GetRequiredService(t); // ActivatorUtilities.GetServiceOrCreateInstance(m_ServiceProvider, t);
-			return new Consumer<T>((IConsumer<T>)instance);
+			Consumer<T> result = null;
+			using (var scope = m_ServiceProvider.CreateScope())
+			{
+				var instance = scope.ServiceProvider.GetRequiredService(t);
+				result = new Consumer<T>((IConsumer<T>)instance);
+			}
+			return result;
 		}
 	}
 }
