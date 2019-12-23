@@ -118,7 +118,7 @@ namespace EventBrokR
 
 		private Consumer<T> Resolve<T>(Type t)
 		{
-			var instance = ActivatorUtilities.CreateInstance(m_ServiceProvider, t);
+			var instance = m_ServiceProvider.GetRequiredService(t); // ActivatorUtilities.GetServiceOrCreateInstance(m_ServiceProvider, t);
 			return new Consumer<T>((IConsumer<T>)instance);
 		}
 	}

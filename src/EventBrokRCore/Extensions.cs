@@ -13,13 +13,14 @@ namespace EventBrokR
 	{
 		public static IServiceCollection AddEventBrokRServices([NotNull] this IServiceCollection services, Action<Container> containerExpression)
 		{
-			var container = new Container();
+			var container = new Container(services);
 			containerExpression.Invoke(container);
 			services.AddSingleton(container);
 			services.AddSingleton<IPublisher, Publisher>();
 			return services;
 		}
 
+		/*
 		public static void Register<TConsumer>(this Container container)
 		{
 			var t = typeof(TConsumer);
@@ -27,7 +28,7 @@ namespace EventBrokR
 			{
 				container.Registrations.Add(t);
 			}
-		}
+		}*/
 
 		public static bool IsDynamicPropertyExists(this System.Dynamic.ExpandoObject obj, string propertyName)
 		{
