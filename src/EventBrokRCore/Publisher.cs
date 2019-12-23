@@ -19,24 +19,16 @@ namespace EventBrokR
 		private IServiceProvider m_ServiceProvider;
 
 		public Publisher(ILogger<Publisher> logger,
-			IServiceProvider serviceProvider)
+			IServiceProvider serviceProvider,
+			Container container)
 		{
-			this.Container = new Container();
+			this.Container = container;
 			this.Logger = logger;
 			this.m_ServiceProvider = serviceProvider;
 		}
 
 		protected Container Container { get; }
 		protected ILogger<Publisher> Logger { get; private set; }
-
-		public void RegisterConsumer<TConsumer>()
-		{
-			var t = typeof(TConsumer);
-			if (!Container.Registrations.Contains(t))
-			{
-				Container.Registrations.Add(t);
-			}
-		}
 
 		public void Subscribe<TMessage>(Action<TMessage> predicate)
 		{

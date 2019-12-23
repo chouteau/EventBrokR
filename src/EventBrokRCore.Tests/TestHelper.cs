@@ -25,7 +25,11 @@ namespace EventBrokRCore.Tests
 		{
 			m_ServiceCollection = new ServiceCollection();
 
-			m_ServiceCollection.AddEventBrokRServices();
+			m_ServiceCollection.AddEventBrokRServices(container =>
+			{
+				container.Register<MyConsumer>();
+				container.Register<MyDynamicConsumer>();
+			});
 
 			var loggerFactory = new LoggerFactory();
 			m_ServiceCollection.AddSingleton(loggerFactory);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +11,22 @@ namespace EventBrokR
 {
 	public static class Extensions
 	{
-		public static IServiceCollection AddEventBrokRServices(this IServiceCollection services)
+		public static IServiceCollection AddEventBrokRServices([NotNull] this IServiceCollection services, Action<Container> containerExpression)
 		{
+			var container = new Container();
+			containerExpression.Invoke(container);
+			services.AddSingleton(container);
 			services.AddSingleton<IPublisher, Publisher>();
 			return services;
+		}
+
+		public static void Register<TConsumer>(this Container container)
+		{
+			var t = typeof(TConsumer);
+			if (!container.Registrations.Contains(t))
+			{
+				container.Registrations.Add(t);
+			}
 		}
 
 		public static bool IsDynamicPropertyExists(this System.Dynamic.ExpandoObject obj, string propertyName)

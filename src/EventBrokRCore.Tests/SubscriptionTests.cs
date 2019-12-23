@@ -12,8 +12,6 @@ namespace EventBrokRCore.Tests
 		public void Setup()
 		{
 			Publisher = TestHelper.Current.GetService<EventBrokR.IPublisher>();
-			Publisher.RegisterConsumer<MyConsumer>();
-			Publisher.RegisterConsumer<MyDynamicConsumer>();
 		}
 
 		protected EventBrokR.IPublisher Publisher { get; set; }

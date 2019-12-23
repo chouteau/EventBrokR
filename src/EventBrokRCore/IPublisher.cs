@@ -11,7 +11,6 @@ namespace EventBrokR
 	/// </summary>
 	public interface IPublisher
 	{
-		void RegisterConsumer<TConsumer>();
 		void Subscribe<TMessage>(Action<TMessage> predicate);
 		Task PublishAsync<TEvent>(TEvent eventMessage, int delay = 0);
 		dynamic CreateDynamicMessage(string name);
