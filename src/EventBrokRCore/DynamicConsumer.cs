@@ -8,7 +8,7 @@ namespace EventBrokR
 {
 	public abstract class DynamicConsumerBase : IConsumer<System.Dynamic.ExpandoObject>
 	{
-		public void Handle(System.Dynamic.ExpandoObject eventMessage)
+		public async Task HandleAsync(System.Dynamic.ExpandoObject eventMessage)
 		{
 			if (!eventMessage.IsDynamicPropertyExists("Name"))
 			{
@@ -16,7 +16,7 @@ namespace EventBrokR
 			}
 
 			var d = eventMessage as dynamic;
-			HandleMessage(d.Name as string, d);
+			await HandleMessage(d.Name as string, d);
 		}
 
 		protected abstract void HandleMessage(string name, dynamic message);

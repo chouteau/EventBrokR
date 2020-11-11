@@ -8,7 +8,7 @@ namespace EventBrokRCore.Tests
 {
 	class MyDynamicConsumer : EventBrokR.IConsumer<System.Dynamic.ExpandoObject>
 	{
-		public void Handle(System.Dynamic.ExpandoObject eventMessage)
+		public async Task HandleAsync(System.Dynamic.ExpandoObject eventMessage)
 		{
 			dynamic d = eventMessage;
 			StaticContainer.Content = d.Message;

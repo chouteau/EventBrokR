@@ -2,13 +2,14 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using EventBrokR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
 
 namespace EventBrokRCore.Tests
 {
 	[TestClass]
 	public class SubscriptionTests
 	{
-		[TestInitialize]
+		[ClassInitialize]
 		public void Setup()
 		{
 			Publisher = TestHelper.Current.GetService<EventBrokR.IPublisher>();
@@ -17,27 +18,27 @@ namespace EventBrokRCore.Tests
 		protected EventBrokR.IPublisher Publisher { get; set; }
 
 		[TestMethod]
-		public void Handle_Event()
+		public async Task Handle_Event()
 		{
 			StaticContainer.Content = null;
-			Publisher.PublishAsync(new MyEvent() { Name = "Test" }).Wait();
+			await Publisher.PublishAsync(new MyEvent() { Name = "Test" });
 
 			Assert.AreEqual(StaticContainer.Content, "Test");
 		}
 
 		[TestMethod]
-		public void Dynamic_Handle_Event()
+		public async Task Dynamic_Handle_Event()
 		{
 			StaticContainer.Content = null;
 			dynamic d = new System.Dynamic.ExpandoObject();
 			d.Message = "Test";
-			Publisher.PublishAsync(d).Wait();
+			await Publisher.PublishAsync(d);
 
 			Assert.AreEqual(StaticContainer.Content, "Test");
 		}
 
 		[TestMethod]
-		public void Handle_Event_With_Anonymous_Consumer()
+		public async Task Handle_Event_With_Anonymous_Consumer()
 		{
 			StaticContainer.Content = null;
 			Publisher.Subscribe<MyEvent>(@event =>
@@ -45,7 +46,7 @@ namespace EventBrokRCore.Tests
 				StaticContainer.Content = @event.Name;
 			});
 
-			Publisher.PublishAsync(new MyEvent() { Name = "Test" }).Wait();
+			await Publisher.PublishAsync(new MyEvent() { Name = "Test" });
 
 			Assert.AreEqual(StaticContainer.Content, "Test");
 		}

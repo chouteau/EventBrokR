@@ -20,16 +20,6 @@ namespace EventBrokR
 			return services;
 		}
 
-		/*
-		public static void Register<TConsumer>(this Container container)
-		{
-			var t = typeof(TConsumer);
-			if (!container.Registrations.Contains(t))
-			{
-				container.Registrations.Add(t);
-			}
-		}*/
-
 		public static bool IsDynamicPropertyExists(this System.Dynamic.ExpandoObject obj, string propertyName)
 		{
 			if (obj == null)

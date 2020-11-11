@@ -14,7 +14,6 @@ namespace EventBrokR
 		internal Container(IServiceCollection serviceCollection)
 		{
 			m_ServiceCollection = serviceCollection;
-			// this.Registrations = new List<Type>();
 			this.Subscriptions = new List<object>();
 		}
 
@@ -24,14 +23,8 @@ namespace EventBrokR
 		{
 			var t = typeof(TConsumer);
 			m_ServiceCollection.AddTransient(t);
-			/*
-			if (!container.Registrations.Contains(t))
-			{
-				container.Registrations.Add(t);
-			}*/
 		}
 
-		// internal IList<Type> Registrations { get; set; }
 		internal IList<object> Subscriptions { get; set; }
 	}
 }

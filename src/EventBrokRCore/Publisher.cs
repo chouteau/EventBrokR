@@ -36,14 +36,18 @@ namespace EventBrokR
 			Container.Subscriptions.Add(consumer);
 		}
 
-		public virtual Task PublishAsync<T>(T eventMessage, int delay = 0)
+		public virtual async Task PublishAsync<T>(T eventMessage, int delay = 0)
 		{
-			// For tests
-			var result = Task.Run(() =>
+			var subscriptions = GetSubscriptions<T>();
+			if (subscriptions == null || subscriptions.Count() == 0)
 			{
-				Publish(eventMessage);
-			});
-			return result;
+				return;
+			}
+
+			foreach (var subscription in subscriptions)
+			{
+				await PublishToConsumerAsync(subscription, eventMessage);
+			}
 		}
 
 		public virtual dynamic CreateDynamicMessage(string messageName)
@@ -57,25 +61,11 @@ namespace EventBrokR
 			return result;
 		}
 
-		protected virtual void Publish<T>(T eventMessage)
-		{
-			var subscriptions = GetSubscriptions<T>();
-			if (subscriptions == null || subscriptions.Count() == 0)
-			{
-				return;
-			}
-
-			foreach (var subscription in subscriptions)
-			{
-				PublishToConsumer(subscription, eventMessage);
-			}
-		}
-
-		private void PublishToConsumer<T>(Consumer<T> x, T eventMessage)
+		private async Task PublishToConsumerAsync<T>(Consumer<T> x, T eventMessage)
 		{
 			try
 			{
-				x.Instance.Handle(eventMessage);
+				await x.Instance.HandleAsync(eventMessage);
 			}
 			catch (Exception ex)
 			{
@@ -90,6 +80,7 @@ namespace EventBrokR
 				}
 			}
 		}
+
 
 		internal IEnumerable<Consumer<T>> GetSubscriptions<T>()
 		{

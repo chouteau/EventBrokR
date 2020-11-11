@@ -15,9 +15,9 @@ namespace EventBrokR
 			m_Predicate = predicate;
 		}
 
-		public void Handle(T eventMessage)
+		public async Task HandleAsync(T eventMessage)
 		{
-			m_Predicate.Invoke(eventMessage);
+			await Task.Run(() => m_Predicate.Invoke(eventMessage));
 		}
 	}
 }

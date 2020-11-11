@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EventBrokR
 {
@@ -12,6 +13,6 @@ namespace EventBrokR
 	/// <typeparam name="T"></typeparam>
 	public interface IConsumer<TEvent>
 	{
-		void Handle(TEvent eventMessage);
+		Task HandleAsync(TEvent eventMessage);
 	}
 }
