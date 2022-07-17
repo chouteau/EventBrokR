@@ -8,10 +8,11 @@ namespace EventBrokRCore.Tests
 {
 	class MyConsumer : EventBrokR.IConsumer<MyEvent>
 	{
-		public async Task HandleAsync(MyEvent eventMessage)
+		public Task HandleAsync(MyEvent eventMessage)
 		{
 			Console.WriteLine(eventMessage);
 			StaticContainer.Content = eventMessage.Name;
+			return Task.CompletedTask;
 		}
 	}
 }

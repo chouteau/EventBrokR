@@ -11,7 +11,7 @@ namespace EventBrokR
 {
 	public static class Extensions
 	{
-		public static IServiceCollection AddEventBrokRServices([NotNull] this IServiceCollection services, Action<Container> containerExpression)
+		public static IServiceCollection AddEventBrokRServices(this IServiceCollection services, Action<Container> containerExpression)
 		{
 			var container = new Container(services);
 			containerExpression.Invoke(container);
@@ -19,6 +19,15 @@ namespace EventBrokR
 			services.AddSingleton<IPublisher, Publisher>();
 			return services;
 		}
+
+		public static IServiceCollection AddEventBrokRServices(this IServiceCollection services, Container container)
+		{
+			container.ServiceCollection = services;
+			services.AddSingleton(container);
+			services.AddSingleton<IPublisher, Publisher>();
+			return services;
+		}
+
 
 		public static bool IsDynamicPropertyExists(this System.Dynamic.ExpandoObject obj, string propertyName)
 		{

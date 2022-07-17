@@ -10,19 +10,25 @@ namespace EventBrokR
 {
 	public class Container
 	{
-		private readonly IServiceCollection m_ServiceCollection;
 		internal Container(IServiceCollection serviceCollection)
 		{
-			m_ServiceCollection = serviceCollection;
+			this.ServiceCollection = serviceCollection;
 			this.Subscriptions = new List<object>();
 		}
 
-		public IEnumerable<Type> Registrations => m_ServiceCollection.Select(i => i.ServiceType);
+		internal IServiceCollection ServiceCollection { get; set; }
+
+		public IEnumerable<Type> Registrations => ServiceCollection.Select(i => i.ServiceType);
 
 		public void Register<TConsumer>()
 		{
 			var t = typeof(TConsumer);
-			m_ServiceCollection.AddTransient(t);
+			ServiceCollection.AddTransient(t);
+		}
+
+		public void Register(Type t)
+		{
+			ServiceCollection.AddTransient(t);
 		}
 
 		internal IList<object> Subscriptions { get; set; }
